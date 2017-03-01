@@ -677,6 +677,11 @@ class HotSpotter(DynStruct):
     @profile
     @util.indent_decor('[hs.add_chip]')
     def add_chip(hs, gx, roi, nx=0, theta=0, props={}, dochecks=True):
+		''' 
+		hs: image table
+		gx: image
+		roi: chip
+		'''
         # TODO: Restructure for faster adding (preallocate and double size)
         # OR just make all the tables python lists
         print('[hs] adding chip to gx=%r' % gx)
