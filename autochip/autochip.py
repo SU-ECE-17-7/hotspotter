@@ -1,30 +1,88 @@
 
+EXTENSION = '.bmp'
+
 ''' Do autochipping '''
-def doAutochipping(directoryToTemplates, exclFac = 1, stopCrit = .75, skip = 8, crit = [0,0,1], minSize = [1,1]):
+def doAutochipping(hs, directoryToTemplates, exclFac = 1, stopCrit = .9, skip = 8, crit = [0,0,1], minSize = [1,1]):
 	'''
 	Driver for autochipping. Designed to be plug-n-play with HotSpotter GUI
 	Author: Joshua Beard
+	
+	INPUT:
+		hs
+			<instantiation of hotspotter object>
+			
+		directoryToTemplates
+			<string>
+			full directory to templates
+		exclFac
+			<int>
+			range: [0, inf]
+			measure of how much of each chip to exclude on consecutive searches. 
+			exclFac == 0 -> single point at center
+			exclFac > 0 -> amount of chip ignored on future chips is proportional to 1/exclFac^2
+		stopCrit
+			<int> or <float>
+			stopping criterion
+			stopCrit < 1 -> percentage of template captured by chips before stopping
+			stopCrit >= 1 -> number of chips captured before stopping
+		skip
+			<int>
+			number of lines we skip when searching for largest rectangles
+		crit
+			<list, dtype>
+			maximization criteria for finding largest rectangles
+		minSize
+			<list>
+			minimum size of rectangle. 
+			If minSize >= 1, corresponds to pixels
+			If minSize < 1, corresponds to fraction of image size	
+
+	OUTPUT:
+		Dictionary of lists of tuples
+			tuples are in (x, y, w, h) format representing the bounds of each chip found
+			lists are collections of all chips pulled
+			dictionary uses image/template name to index lists of chips
 
 	C: 2/27/17
 
 	EDITS:
-
+		3/4/17
+			Comments for clarity, started coding insertion into chip table
 			
 	NOTES:
 
 	TODOS:
+		3/4/17
+			Import fewer modules
 
 	'''
 	''' Initialization '''
-	import os
+	import os # Don't import the whole thing.
 	chippedImages = {};
-	for fileName in os.listdir(directoryToTemplates):
-		if fileName.endswith('.mat'):
-			# get template and autochip
-			template = getTemplate(directoryToTemplates, fileName)
-			chips = autochip(template, exclFac, skip, stopCrit, crit, minSize)
-			chippedImages[fileName[0:len(fileName)-4]] = chips
-	return chippedImages
+	''' Work '''
+	try:	# Check to see if chip table is defined in this scope
+		chipTable
+	except NameError: # If chip table is not defined, print out values
+		print('[ac] WARNING: chipTable does not exist in this scope\n')
+		for fileName in os.listdir(directoryToTemplates):
+			if fileName.endswith(EXTENSION):
+				# get template and autochip
+				template = getTemplate(directoryToTemplates, fileName)
+				chips = autochip(template, exclFac, skip, stopCrit, crit, minSize)
+				chippedImages[fileName[0:len(fileName)-len(EXTENSION)]] = chips
+		return chippedImages
+	else:	# If chip table is defined, put chips directl into it
+	import hotspotter.HotSpotterAPI as api
+	imgIter = 0;
+		for fileName in os.listdir(directoryToTemplates):
+			if fileName.endswith(EXTENSION):
+				# get template and autochip
+				template = getTemplate(directoryToTemplates, fileName)
+				chips = autochip(template, exclFac, skip, stopCrit, crit, minSize)
+				for chipIter in range(0,len(chips)): # For all the found chips
+					
+
+				
 #/doAutochipping
 
 ''' autochip '''
