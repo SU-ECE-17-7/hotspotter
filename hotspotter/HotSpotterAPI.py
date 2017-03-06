@@ -775,6 +775,52 @@ class HotSpotter(DynStruct):
         hs.tables.gx2_aif   = np.array(gx2_aif   + new_aifs)
         hs.update_samples()
         return nNewImages
+    @profile
+    @util.indent_decor('[hs.add_images]')
+    def add_images(hs, fpath_list, move_images=True):
+        nImages = len(fpath_list)
+        print('[hs.add_imgs] adding %d images' % nImages)
+        img_dir = hs.dirs.img_dir
+        copy_list = []
+        util.ensurepath(img_dir)
+        if move_images:
+            # Build lists of where the new images will be
+            fpath_list2 = [join(img_dir, split(fpath)[1]) for fpath in fpath_list]
+            copy_iter = izip(fpath_list, fpath_list2)
+            copy_list = [(src, dst) for src, dst in copy_iter if not exists(dst)]
+            nExist = len(fpath_list2) - len(copy_list)
+            print('[hs] copying %d images' % len(copy_list))
+            print('[hs] %d images already exist' % nExist)
+            # RCOS TODO: Copying like this should be a helper function.
+            # It appears in multiple places
+            # Also there should be the option of parallelization? IDK, these are
+            # disk writes, but it still might help.
+            mark_progress, end_progress = util.progress_func(len(copy_list), lbl='Copying Image')
+            for count, (src, dst) in enumerate(copy_list):
+                shutil.copy(src, dst)
+                mark_progress(count)
+            end_progress()
+        else:
+            print('[hs.add_imgs] using original image paths')
+            fpath_list2 = fpath_list
+        # Get location of the new images relative to the image dir
+        gx2_gname = hs.tables.gx2_gname.tolist()
+        gx2_aif   = hs.tables.gx2_aif.tolist()
+        relpath_list = [relpath(fpath, img_dir) for fpath in fpath_list2]
+        current_gname_set = set(gx2_gname)
+        # Check to make sure the gnames are not currently indexed
+        new_gnames = [gname for gname in relpath_list if not gname in current_gname_set]
+        new_aifs   = [False] * len(new_gnames)
+        nNewImages = len(new_gnames)
+        nIndexed = nImages - nNewImages
+        print('[hs.add_imgs] new_gnames:\n' + '\n'.join(new_gnames))
+        print('[hs.add_imgs] %d images already indexed.' % nIndexed)
+        print('[hs.add_imgs] Added %d new images.' % nIndexed)
+        # Append the new gnames to the hotspotter table
+        hs.tables.gx2_gname = np.array(gx2_gname + new_gnames)
+        hs.tables.gx2_aif   = np.array(gx2_aif   + new_aifs)
+        hs.update_samples()
+        return nNewImages
 
     # ---------------
     # Deleting functions
