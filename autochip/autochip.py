@@ -2,7 +2,7 @@
 EXTENSION = '.bmp'
 
 ''' Do autochipping '''
-def doAutochipping(hs, directoryToTemplates, exclFac = 1, stopCrit = .9, skip = 8, crit = [0,0,1], minSize = [1,1]):
+def doAutochipping(directoryToTemplates, exclFac = 1, stopCrit = .9, skip = 8, crit = [0,0,1], minSize = [1,1]):
 	'''
 	Driver for autochipping. Designed to be plug-n-play with HotSpotter GUI
 	Author: Joshua Beard
@@ -54,34 +54,19 @@ def doAutochipping(hs, directoryToTemplates, exclFac = 1, stopCrit = .9, skip = 
 	TODOS:
 		3/4/17
 			Import fewer modules
-
+			Initialize chippedImages, double size when needed
 	'''
 	''' Initialization '''
 	import os # Don't import the whole thing.
 	chippedImages = {};
-	''' Work '''
-	try:	# Check to see if chip table is defined in this scope
-		chipTable
-	except NameError: # If chip table is not defined, print out values
-		print('[ac] WARNING: chipTable does not exist in this scope\n')
-		for fileName in os.listdir(directoryToTemplates):
-			if fileName.endswith(EXTENSION):
-				# get template and autochip
-				template = getTemplate(directoryToTemplates, fileName)
-				chips = autochip(template, exclFac, skip, stopCrit, crit, minSize)
-				chippedImages[fileName[0:len(fileName)-len(EXTENSION)]] = chips
-		return chippedImages
-	else:	# If chip table is defined, put chips directl into it
-	import hotspotter.HotSpotterAPI as api
-	imgIter = 0;
-		for fileName in os.listdir(directoryToTemplates):
-			if fileName.endswith(EXTENSION):
-				# get template and autochip
-				template = getTemplate(directoryToTemplates, fileName)
-				chips = autochip(template, exclFac, skip, stopCrit, crit, minSize)
-				for chipIter in range(0,len(chips)): # For all the found chips
-					
 
+	for fileName in os.listdir(directoryToTemplates):
+		if fileName.endswith(EXTENSION):
+			# get template and autochip
+			template = getTemplate(directoryToTemplates, fileName)
+			chips = autochip(template, exclFac, skip, stopCrit, crit, minSize)
+			chippedImages[fileName[0:len(fileName)-len(EXTENSION)]] = chips
+	return chippedImages
 				
 #/doAutochipping
 
@@ -92,7 +77,7 @@ def autochip(template, exclFac = 1, skip = 8, stopCrit = .75, crit = [0,0,1], mi
 	Input:
 		template
 			<numpy.matrix, dtype=bool>
-			boolean region defining area of interest. MATLAB .mat file, converted to numpy.matrix 	
+			boolean region defining area of interest.  	
 		exclFac
 			<int>
 			Measure of how much of each chip we ignore on consecutive searches
