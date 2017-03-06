@@ -678,11 +678,11 @@ class HotSpotter(DynStruct):
     @profile
     @util.indent_decor('[hs.add_chip]')
     def add_chip(hs, gx, roi, nx=0, theta=0, props={}, dochecks=True):
-		''' 
-		hs: image table
-		gx: image
-		roi: chip
-		'''
+        ''' 
+        hs: image table
+        gx: image
+        roi: chip
+        '''
         # TODO: Restructure for faster adding (preallocate and double size)
         # OR just make all the tables python lists
         print('[hs] adding chip to gx=%r' % gx)
@@ -719,14 +719,13 @@ class HotSpotter(DynStruct):
     @profile # IhavenoideawhatImdoing
     @util.indent_decor('[hs.autochip]')
     def autochip(hs, directoryToTemplates, exclFac = 1, stopCrit = .9, skip = 8, crit = [0,0,1], minSize = [1,1]):
-        chipDict = ac.doAutochipping(directoryToTemplates, exclFac = 1, stopCrit = .9, skip = 8, crit = [0,0,1], minSize = [1,1]):
+        chipDict = ac.doAutochipping(directoryToTemplates, exclFac = 1, stopCrit = .9, skip = 8, crit = [0,0,1], minSize = [1,1])
         chipNum = 0;
         for image in chipDict:
             for chip in chipDict[image]:
                 add_chip(hs, chipNum, chipDict[image][chip]) # IDK what to do with the rest of the parameters.
                 chipNum = chipNum+1
-        print('[hs] added %d chips' % chipNum
-        # test
+        print('[hs] added %d chips' % chipNum)
         return chipNum
         
 
