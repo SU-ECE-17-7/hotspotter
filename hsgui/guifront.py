@@ -155,7 +155,7 @@ def connect_button_signals(front):
     ui.pushButton_2.clicked.connect(back.save_database)
     #ui.AutoChip.clicked.connect(back.AutoChip)
     ui.pushButton_3.clicked.connect(back.save_database)
-    #ui.AutoQuery.clicked.connect(back.AutoQuery)
+    ui.AutoQuery.clicked.connect(back.MCL)
 
 def connect_action_signals(front):
     ui = front.ui

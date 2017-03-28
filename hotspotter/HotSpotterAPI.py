@@ -25,8 +25,8 @@ import feature_compute2 as fc2
 import load_data2 as ld2
 import match_chips3 as mc3
 import matching_functions as mf
-
-
+from MCL import makeMatrix as mcl #Noah's
+from MCL.mcl import mcl_clustering as mclCluster
 def _checkargs_onload(hs):
     'checks relevant arguments after loading tables'
     args = hs.args
@@ -498,6 +498,41 @@ class HotSpotter(DynStruct):
         qdat.dcxs = gt_cxs
         print('[mc3] len(gt_cxs) = %r' % (gt_cxs,))
         return mc3.query_dcxs(hs, qcx, gt_cxs, qdat)
+
+    #Matt Dioso and Noah Weller
+    #testing function to test MCL matrix funcitoinality
+    @profile
+    def call_MCL(hs):
+        Matrix = mcl.createMatrix(hs)
+        mcl.createFile(hs,Matrix)
+        print ("Matrix created............")
+        M, G = mclCluster.get_graph("Matrix.csv")
+        M, clusters = mclCluster.networkx_mcl(G, expand_factor = 2,
+                                  inflate_factor = 3,
+                                  max_loop = 60,
+                                  mult_factor = 3)
+        mclCluster.clusters_to_output(clusters, hs)
+
+
+
+
+
+
+        
+        #sys.argv = ['mcl_clustering.py', 'Matrix.csv']
+        #execfile('mcl_clustering.py Matrix.csv')
+        #cluster.print_info()
+       # M, G = get_graph(Matrix.csv)
+        #print(" number of node: %s\n" %M.shape[0])
+        
+        #print("{}: {}".format(time.time(), "evaluating clusters..."))
+        #M, clusters = networkx_mcl(G, expand_factor = options.expand_factor,
+                                   #inflate_factor = options.inflate_factor,
+                                   #max_loop = options.max_loop,
+                                   #mult_factor = options.mult_factor)
+        #print("{}: {}".format(time.time(), "done\n"))
+
+        #clusters_to_output(clusters)
 
     # ---------------
     # Change functions

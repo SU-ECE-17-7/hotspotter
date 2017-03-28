@@ -730,6 +730,15 @@ class MainWindowBackend(QtCore.QObject):
         back.select_gx(gx)
         print('')
 
+
+    '''Noah's MCL test function'''
+    @slot_()
+    @blocking
+    @profile
+    def MCL(back):
+        back.hs.call_MCL()
+        print('')
+        
     @slot_()
     @blocking
     @profile

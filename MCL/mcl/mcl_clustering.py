@@ -104,12 +104,12 @@ def get_options():
                       help="expand factor (default: %default)")
     parser.add_option("-i", "--inflate_factor",
                       dest="inflate_factor",
-                      default=2,
+                      default=3,# was 2
                       type=float,
                       help="inflate factor (default: %default)")
     parser.add_option("-m", "--mult_factor",
                       dest="mult_factor",
-                      default=2,
+                      default=3,#was 2
                       type=float,
                       help="multiply factor (default: %default)")
     parser.add_option("-l", "--max_loops",
@@ -149,22 +149,17 @@ def get_graph(csv_filename):
     G = nx.from_numpy_matrix(np.matrix(M))
     return np.array(M), G
 
-def clusters_to_output(clusters, options):
-    if options.output and len(options.output)>0:
-        f = open(options.output, 'w')
-        for k, v in clusters.items():
-            f.write("%s|%s\n" % (k, ", ".join(map(str, v)) ))
-        f.close()
-    else:
-       print("Clusters:")
-       for k, v in clusters.items():
-           print('{}, {}'.format(k, v))
-       #for k,v in cluster.items():
-            #for chipID in v:
-                #cid_dict[chipID] = k
-        #for chipobj in hs.get_valid_cxs():
-            #chipID = hs.cx2_cid(chipobj)
-            #hs.change_name(chipobj,("Cat_" +str(cid_dict[chipID])))
+def clusters_to_output(clusters, hs):
+    print("Clusters:")
+    for k, v in clusters.items():
+        print('{}, {}'.format(k, v))
+    #cid_dict = {}
+    #for k,v in clusters.items():
+     #   for chipID in v:
+      #      cid_dict[chipID] = k
+   # for chipobj in hs.get_valid_cxs():
+    #    chipID = hs.cx2_cid(chipobj)
+     #   hs.change_property(chipobj, cx, ("Cat_" +str(cid_dict[chipID])))
 
 if __name__ == '__main__':
 

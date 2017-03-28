@@ -43,14 +43,14 @@ def sameSet(chip1, chip2):
     if getLoc(chip1) == getLoc(chip2):
         #if on same date
         if getDate(chip1) == getDate(chip2):
-            print "same location and date"
+            #print "same location and date"
 
             #if close time
             if np.abs(getTime(chip1) - getTime(chip2)) <= secsThresh:
-                print "within secsThresh"
+                #print "within secsThresh"
                 return True
             else:
-                print "not within secsThresh"
+                #print "not within secsThresh"
                 return False
         #elif one day apart but still less than 90 second:
         #    (getTime(chip1) <= secsThresh or
@@ -58,10 +58,10 @@ def sameSet(chip1, chip2):
             #check dates still
 
         else:
-            print "not same date"
+            #print "not same date"
             return False
     else:
-        print "not same location"
+        #print "not same location"
         return False
 
 
@@ -104,6 +104,7 @@ def createFile(hs, Mat):
 		for col in range(size-1): 
 			file_obj.write(str(Mat[row,col]) + ",")
 		file_obj.write(str(Mat[row,size-1]) +"\n")
+        #print "file created"
 
 	
 if __name__ == "__main__":
