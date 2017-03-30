@@ -67,11 +67,11 @@ def sameSet(chip1, chip2):
 
 def getLoc(chip):
     chipList = chip.split("__")
-    loc = (chipList[0] + "__" + chipList[1])
+    loc = (chipList[0] + "__" + chipList[1] +"__"+chipList[2])
     return loc
 
 def getDate(chip):
-    date  = chip.split("__")[2]
+    date  = chip.split("__")[3]
     return date
 
 #def getDateInDays(date):
@@ -79,7 +79,7 @@ def getDate(chip):
 
 def getTime(chip):
     chipList = chip.split("__")
-    timeStr = chipList[3]
+    timeStr = chipList[4]
 
     timeStr = timeStr.split("(")[0]
     timeList = timeStr.split("-")
