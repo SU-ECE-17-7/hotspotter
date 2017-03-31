@@ -512,11 +512,7 @@ class HotSpotter(DynStruct):
                                   max_loop = 60,
                                   mult_factor = 3)
         mclCluster.clusters_to_output(clusters, hs)
-
-
-
-
-
+        os.remove("Matrix.csv")
 
         
         #sys.argv = ['mcl_clustering.py', 'Matrix.csv']

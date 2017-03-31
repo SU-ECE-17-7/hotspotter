@@ -1,5 +1,5 @@
 """
-    This program needs to be able to read in relationships between chips from the same image,
+    This program needs to be able to read in relationships between chips from the same image ,
     images from the same set, and scores realting chips to eachother from recognition algorithm
 """
 #not sure what all dependencies I need. Look at what is used in HotSPotter Api
