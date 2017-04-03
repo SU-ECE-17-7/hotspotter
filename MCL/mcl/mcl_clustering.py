@@ -156,7 +156,8 @@ def clusters_to_output(clusters, hs):
     cid_dict = {}
     for k,v in clusters.items():
         for chipID in v:
-            cid_dict[chipID+1] = k+1
+            if (chipID+1) not in cid_dict.keys():
+                cid_dict[chipID+1] = k+1
 
     for k,v in cid_dict.items():
         print('{}, {}'.format(k,v))
@@ -167,7 +168,7 @@ def clusters_to_output(clusters, hs):
         chipID = hs.cx2_cid(chipobj)
         chipname = "Cat_"+str(cid_dict[chipID])
         hs.change_name(chipobj, chipname)
-        #hs.change_property(chipobj, hs.cx2_name, chipname)
+        
 
 if __name__ == '__main__':
 
