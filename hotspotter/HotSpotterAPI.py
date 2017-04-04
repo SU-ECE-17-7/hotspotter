@@ -25,8 +25,14 @@ import feature_compute2 as fc2
 import load_data2 as ld2
 import match_chips3 as mc3
 import matching_functions as mf
+<<<<<<< HEAD
 from MCL import makeMatrix as mcl #Noah's
 from MCL.mcl import mcl_clustering as mclCluster
+=======
+from autochip import autochip as ac
+import pdb
+
+>>>>>>> 49dda333a670e0d4ebb0448f652740a2c8ab786b
 def _checkargs_onload(hs):
     'checks relevant arguments after loading tables'
     args = hs.args
@@ -599,6 +605,7 @@ class HotSpotter(DynStruct):
 
     @profile
     def add_chip(hs, gx, roi, nx=0, theta=0, props={}, dochecks=True):
+        
         # TODO: Restructure for faster adding (preallocate and double size)
         # OR just make all the tables python lists
         print('[hs] adding chip to gx=%r' % gx)
@@ -613,7 +620,11 @@ class HotSpotter(DynStruct):
         hs.tables.cx2_cid   = np.concatenate((hs.tables.cx2_cid, [next_cid]))
         hs.tables.cx2_nx    = np.concatenate((hs.tables.cx2_nx,  [nx]))
         hs.tables.cx2_gx    = np.concatenate((hs.tables.cx2_gx,  [gx]))
-        hs.tables.cx2_roi   = np.vstack((hs.tables.cx2_roi, [roi]))
+        if len(roi) == 1 and len(roi[0]) == 4: # This is the case that was throwing errors
+            hs.tables.cx2_roi = np.vstack((hs.tables.cx2_roi, roi))
+        else: # This is the case that HotSpotter was originally designed for:
+            hs.tables.cx2_roi   = np.vstack((hs.tables.cx2_roi, [roi]))
+            
         hs.tables.cx2_theta = np.concatenate((hs.tables.cx2_theta, [theta]))
         prop_dict = hs.tables.prop_dict
         for key in prop_dict.iterkeys():
@@ -625,7 +636,27 @@ class HotSpotter(DynStruct):
             # Remove any conflicts from memory
             hs.unload_cxdata(cx)
             hs.delete_queryresults_dir()  # Query results are now invalid
-        return cx
+        return cx     
+
+    '''Edited 3//7/17 by Matt Dioso'''
+    ''' Added 3/5/17 by Joshua Beard 
+    I'm sure it needs more work
+    Make sure to replace <tabs> with four <spaces>
+    Need to think about rotation during SQ17'''
+    @profile # IhavenoideawhatImdoing
+    #@helpers.indent_decor('[hs.autochip]') #mine doesn't recognize helpers
+    def autochip(hs, directoryToTemplates, exclFac = 1, stopCrit = 3, skip = 8, crit = [0,0,1], minSize = [1,1]):
+        chipDict = ac.doAutochipping(directoryToTemplates, exclFac, stopCrit, skip, crit, minSize)
+        print(chipDict)
+        imageNum = 0
+        chipNum = 0;
+        for image in chipDict:
+            for chip in chipDict[image]:
+                cx = hs.add_chip(imageNum, chip) # IDK what to do with the rest of the parameters.
+                chipNum = chipNum+1 # This is ultimately somewhat useless.
+            imageNum = imageNum+1
+        print('[hs] added %d chips' % chipNum)
+        return chipNum #don't think this is needed -MD
 
     @profile
     def add_images(hs, fpath_list, move_images=True):

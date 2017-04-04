@@ -1,7 +1,15 @@
+''' 
+autochip.py
+Author: Joshua Beard
+Contributor: Taz Bales-Heisterkamp
+Last Edited: 3/29/17
+'''
 
-EXTENSION = .bmp
+EXTENSION ='.bmp'
+TEMPLATE_MAX_VAL = 255
+
 ''' Do autochipping '''
-def doAutochipping(directoryToTemplates, exclFac = 1, stopCrit = .75, skip = 8, crit = [0,0,1], minSize = [1,1]):
+def doAutochipping(directoryToTemplates, exclFac = 1, stopCrit = 3, skip = 8, crit = [0,0,1], minSize = [1,1]):
 	'''
 	Driver for autochipping. Designed to be plug-n-play with HotSpotter GUI
 	Author: Joshua Beard
@@ -17,19 +25,25 @@ def doAutochipping(directoryToTemplates, exclFac = 1, stopCrit = .75, skip = 8, 
 
 	'''
 	''' Initialization '''
+	print('[ac] doing autochipping')
 	import os
 	chippedImages = {};
 	for fileName in os.listdir(directoryToTemplates):
-		if fileName.endswith('EXTENSION'):
+    #print('Checking file extension')
+		if fileName.endswith(EXTENSION):
 			# get template and autochip
-			template = getTemplate(directoryToTemplates, fileName)
-			chips = autochip(template, exclFac, skip, stopCrit, crit, minSize)
+                        print('[ac] getting template name')
+			template = getTemplate(directoryToTemplates, fileName, EXTENSION)
+                        print(template)
+                        print('[ac] getting chips')
+                        chips = autochip(template, exclFac, skip, stopCrit, crit, minSize)
+                        print(chips)
 			chippedImages[fileName[0:len(fileName)-len(EXTENSION)]] = chips
 	return chippedImages
 #/doAutochipping
 
 ''' autochip '''
-def autochip(template, exclFac = 1, skip = 8, stopCrit = .75, crit = [0,0,1], minSize = [1,1]):
+def autochip(template, exclFac = 1, skip = 8, stopCrit = 1, crit = [0,0,1], minSize = [1,1]):
 	'''
 	Find largest rectangles within a template.
 	Input:
@@ -262,11 +276,8 @@ def findLargestRects(template, crit=[0,0,1], minSize=[1,1], skip=1):
 		minSize[1] = math.floor(minSize[1]*nC)
 	
 		
-	# If we haven't run FINDLARGESTSQUARES yet, do it. 
-	if template.max() - template.min() == 1:
-		S = findLargestSquares(template)
-	else: 	# o.t.w. just use our "template"
-		S = template
+	# run FINDLARGESTSQUARES 
+	S = findLargestSquares(template)
 	
 	# Get longest square side
 	n = S.max()
@@ -458,6 +469,7 @@ def findLargestSquares(template):
 
 	# get height, width of template
 	nR,nC = template.shape;
+	template = template == TEMPLATE_MAX_VAL # Convert to Boolean
 	# Use boolean template to create a float matrix for tracking square sizes
 	S = np.multiply(np.ones((nR, nC)), template)
 
@@ -486,32 +498,46 @@ def findLargestSquares(template):
 #/FindLargestSquares		
 	
 ''' Helper function GETTEMPLATE '''
-import scipy.io as sio
-import os
+from scipy import misc
+from os import sep
+from numpy import asmatrix
 
-def getTemplate(pathTo,matFileName):
-	if os.sep == '\\':				# Windows
+def getTemplate(pathTo, templateFileName, ext = EXTENSION):
+	if sep == '\\':					# Windows
 		if pathTo.endswith('\\'):	# separator is present
-			m = sio.loadmat(pathTo+matFileName)
+			if templateFileName.endswith(ext):
+				m = misc.imread(pathTo+templateFileName)
+			else:			
+				m = misc.imread(pathTo+templateFileName+ext)
 		else:						# separator is absent
-			m = sio.loadmat(pathTo+'\\'+matFileName)
+			if templateFileName.endswith(ext):
+				m = misc.imread(pathTo+'\\'+templateFileName)
+			else:				
+				m = misc.imread(pathTo+'\\'+templateFileName+ext)
 	else:							# Unix
 		if pathTo.endswith('/'):	# separator is present
-			m = sio.loadmat(pathTo+matFileName)
+			if templateFileName.endswith(ext):
+				m = misc.imread(pathTo+templateFileName)			
+			else:
+				m = misc.imread(pathTo+templateFileName+ext)
 		else:						# separator is absent
-			m = sio.loadmat(pathTo+'/'+matFileName)
+			if templateFileName.endswith(ext):
+				m = misc.imread(pathTo+'/'+templateFileName)				
+			else:
+				m = misc.imread(pathTo+'/'+templateFileName+ext)
 	#/if os.sep
 	
-	return m['template']
+	return asmatrix(m)
 #/ getTemplate
 
 ''' MAIN '''	
 if __name__ == "__main__":
+	# Either specify the directory to the templates or the directory to the templates and one of the template names (both as strings)
 	import sys
 	if len(sys.argv) == 2:
 		chippedImages = doAutochipping(sys.argv[1])
 		print chippedImages
-	else:# len(sys.argv) == 3:
+	else:# len(sys.argv) == 3: 
 		template = getTemplate(sys.argv[1], sys.argv[2])
 		C = autochip(template)
 		print C
