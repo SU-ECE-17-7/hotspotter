@@ -731,7 +731,6 @@ class MainWindowBackend(QtCore.QObject):
         back.select_gx(gx)
         print('')
 
-<<<<<<< HEAD
 
     '''Noah's MCL test function'''
     @slot_()
@@ -741,7 +740,6 @@ class MainWindowBackend(QtCore.QObject):
         back.hs.call_MCL()
         print('')
         
-=======
     '''Added 3/7/2017 by Matt Dioso
     pretty rough'''
     @slot_()
@@ -756,7 +754,7 @@ class MainWindowBackend(QtCore.QObject):
         back.populate_tables()
         print('')
 
->>>>>>> 49dda333a670e0d4ebb0448f652740a2c8ab786b
+
     @slot_()
     @blocking
     @profile

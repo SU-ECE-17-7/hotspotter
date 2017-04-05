@@ -25,14 +25,12 @@ import feature_compute2 as fc2
 import load_data2 as ld2
 import match_chips3 as mc3
 import matching_functions as mf
-<<<<<<< HEAD
 from MCL import makeMatrix as mcl #Noah's
+from MCL import autoquery as aq
 from MCL.mcl import mcl_clustering as mclCluster
-=======
 from autochip import autochip as ac
 import pdb
 
->>>>>>> 49dda333a670e0d4ebb0448f652740a2c8ab786b
 def _checkargs_onload(hs):
     'checks relevant arguments after loading tables'
     args = hs.args
@@ -511,14 +509,16 @@ class HotSpotter(DynStruct):
     def call_MCL(hs):
         Matrix = mcl.createMatrix(hs)
         mcl.createFile(hs,Matrix)
+        Matrix1 = aq.loadmatrix(hs)
+        aq.createFile(hs, Matrix1)
         print ("Matrix created............")
-        M, G = mclCluster.get_graph("Matrix.csv")
-        M, clusters = mclCluster.networkx_mcl(G, expand_factor = 2,
-                                  inflate_factor = 2,
-                                  max_loop = 60,
-                                  mult_factor = 2)
-        mclCluster.clusters_to_output(clusters, hs)
-        os.remove("Matrix.csv")
+        #M, G = mclCluster.get_graph("Matrix.csv")
+        #M, clusters = mclCluster.networkx_mcl(G, expand_factor = 2,
+         #                         inflate_factor = 2,
+          #                        max_loop = 60,
+           #                       mult_factor = 2)
+        #mclCluster.clusters_to_output(clusters, hs)
+        #os.remove("Matrix.csv")
 
         
         #sys.argv = ['mcl_clustering.py', 'Matrix.csv']
