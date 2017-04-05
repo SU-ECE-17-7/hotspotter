@@ -508,9 +508,9 @@ class HotSpotter(DynStruct):
         print ("Matrix created............")
         M, G = mclCluster.get_graph("Matrix.csv")
         M, clusters = mclCluster.networkx_mcl(G, expand_factor = 2,
-                                  inflate_factor = 3,
+                                  inflate_factor = 2,
                                   max_loop = 60,
-                                  mult_factor = 3)
+                                  mult_factor = 2)
         mclCluster.clusters_to_output(clusters, hs)
 
 
