@@ -503,6 +503,9 @@ class HotSpotter(DynStruct):
     #testing function to test MCL matrix funcitoinality
     @profile
     def call_MCL(hs):
+        if os.path.isfile("Matrix.csv"):
+            os.remove("Matrix.csv")
+        
         Matrix = mcl.createMatrix(hs)
         mcl.createFile(hs,Matrix)
         print ("Matrix created............")
