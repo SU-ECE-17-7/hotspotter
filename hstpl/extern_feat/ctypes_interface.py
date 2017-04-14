@@ -82,6 +82,9 @@ def load_clib(libname, root_dir):
     Returns:
         clib: a ctypes object used to interface with the library
     '''
+    '''====================='''
+    #import pdb; pdb.set_trace()
+    '''====================='''    
     lib_fpath = find_lib_fpath(libname, root_dir)
     try:
         clib = C.cdll[lib_fpath]

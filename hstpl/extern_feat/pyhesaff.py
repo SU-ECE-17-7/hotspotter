@@ -63,6 +63,9 @@ def load_hesaff_clib():
     '''
     Specificially loads the hesaff lib and defines its functions
     '''
+    '''====================='''
+    #import pdb; pdb.set_trace()
+    '''=====================''' 
     # Get the root directory which should have the dynamic library in it
     #root_dir = realpath(dirname(__file__)) if '__file__' in vars() else realpath(os.getcwd())
     root_dir = realpath(dirname(__file__))
@@ -111,21 +114,32 @@ def detect_kpts(img_fpath, use_adaptive_scale=False, **kwargs):
     kpts = np.empty((nKpts, 5), kpts_dtype)
     desc = np.empty((nKpts, 128), desc_dtype)
     # Populate arrays
+    print('hesaff_ptr: %i' % hesaff_ptr)
+    print('nKpts     : %i' % nKpts)
+    print('len(kpts) : %i' % len(kpts))
+    print('len(desc) : %i' % len(desc))
+    '''====================='''
+    #import pdb; pdb.set_trace()
+    '''====================='''
     hesaff_lib.exportArrays(hesaff_ptr, nKpts, kpts, desc)
+    print('Done with exportArrays completely')
     # Adapt scale if requested
     if use_adaptive_scale:
         #print('Adapting Scale')
         kpts, desc = adapt_scale(img_fpath, kpts)
+    print('Leaving detect_kpts')
     return kpts, desc
 
 
 def adapt_scale(img_fpath, kpts):
+    print('adapt_scale IN')
     import ellipse
     nScales = 16
     nSamples = 16
     low, high = -1, 2
     adapted_kpts = ellipse.adaptive_scale(img_fpath, kpts, nScales, low, high, nSamples)
     adapted_desc = extract_desc(img_fpath, adapted_kpts)
+    print('adapt_scale OUT')
     return adapted_kpts, adapted_desc
 
 
