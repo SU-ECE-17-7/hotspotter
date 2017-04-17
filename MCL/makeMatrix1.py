@@ -14,7 +14,7 @@ secsInDay = 86400
 def createMatrix(hs): #not sure what all needs to be pased in
         fileName = "Matrix.csv"
         file = open(fileName,'rb')
-        data = csv.reader(file, delimter =',')
+        data = csv.reader(file, delimiter =',')
         Matrix = [row for row in data]
          
 	size = hs.get_num_chips()
