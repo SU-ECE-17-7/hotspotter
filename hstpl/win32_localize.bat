@@ -15,8 +15,10 @@ copy "%INSTALL32%\OpenCV\bin\libopencv_highgui249.dll" "libopencv_highgui249.dll
 copy "%INSTALL32%\OpenCV\bin\libopencv_imgproc249.dll" "libopencv_imgproc249.dll"
 
 :: HessAff Executable 
-copy %CODE%\ell_desc\build\hesaffexe.exe hesaff.exe
+:: I think the following line needs to be changed (jb, 4/20/17)
+copy %CODE%\ell_desc\build\hesaffexe.exe hesaff.exe 
 copy %CODE%\ell_desc\build\libhesaff.dll libhesaff.dll
+:: I think the following line needs to be changed (jb, 4/20/17)
 copy %CODE%\ell_desc\pyhesaff.py pyhesaff.py
 
 

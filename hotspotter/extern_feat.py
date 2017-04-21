@@ -51,15 +51,26 @@ def precompute_hesaff(rchip_fpath, feat_fpath, dict_args):
 #---------------------------------------
 # Work functions which call the external feature detectors
 # Helper function to call commands
+''' This is where we need to change stuff!'''
 try:
     from hstpl.extern_feat import pyhesaff
 
+''' Replaces above
+try:
+    from hesaff import pyhesaff
+'''
     def detect_kpts_new(rchip_fpath, dict_args):
         kpts, desc = pyhesaff.detect_kpts(rchip_fpath, **dict_args)
+        ''' Replaces above
+        kpts, desc = pyhesaff.detect_feats(rchip_fpath, **dict_args)
+        '''
         return kpts, desc
     print('[extern_feat] new hessaff is available')
 except ImportError as ex:
     print('[extern_feat] new hessaff is not available: %r' % ex)
+    ''' Replaces above
+    print('[extern_feat] could not import hesaff.pyhesaff: %r' % ex)
+    '''
     if '--strict' in sys.argv:
         raise
 
@@ -76,7 +87,7 @@ except ImportError as ex:
         raise
 
 
-if OLD_HESAFF:
+if OLD_HESAFF: # We shouldn't enter this at all
     detect_kpts = detect_kpts_old
     print('[extern_feat] using: old hessian affine')
 else:

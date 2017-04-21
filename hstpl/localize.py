@@ -19,7 +19,7 @@ from hscom import helpers
 # Localize hessian affine code
 code_dir   = join(expanduser('~'), 'code')
 hsdir      = join(code_dir, 'hotspotter')
-extern_dir = join(hsdir, 'hstpl', 'extern_feat')
+extern_dir = join(hsdir, 'hstpl', 'extern_feat') # Maybe have to change this?
 hesaffsrc_dir = join(code_dir, 'hesaff')
 
 hesaffbuild_dir = join(hesaffsrc_dir, 'build')
@@ -34,7 +34,10 @@ filemap = {
     hesaffsrc_dir: ['pyhesaff.py',
                     'ellipse.py',
                     'pyhesaffexe.py',
-                    'ctypes_interface.py'], }
+                    'ctypes_interface.py'], } 
+    ''' Replaces above # I'm still not sure what to do here...
+    heaffsrc_dir: ['~/code/hesaff/pyhesaff/_pyhesaff.py',
+    '''
 
 for srcdir, fname_list in filemap.iteritems():
     for fname in fname_list:
