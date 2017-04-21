@@ -5,7 +5,7 @@ from hscom import __common__
 # Standard
 import os
 import sys
-from os.path import dirname, realpath, join
+from os.path import dirname, realpath, join, expanduser
 # Scientific
 import numpy as np
 
@@ -35,6 +35,8 @@ INRIA_EXE  = join(EXE_PATH, 'compute_descriptors' + EXE_EXT)
 KPTS_DTYPE = np.float64
 DESC_DTYPE = np.uint8
 
+# Get directory to hesaff repo
+hesaffDir = join(expanduser('~'),'code/hesaff')
 
 #---------------------------------------
 # Define precompute functions
@@ -52,25 +54,34 @@ def precompute_hesaff(rchip_fpath, feat_fpath, dict_args):
 # Work functions which call the external feature detectors
 # Helper function to call commands
 ''' This is where we need to change stuff!'''
-try:
-    from hstpl.extern_feat import pyhesaff
 
-''' Replaces above
+''' Replaced 4/21 '''
+#try:
+    #from hstpl.extern_feat import pyhesaff
+
+'''====================='''
+import pdb; pdb.set_trace()
+'''====================='''
+import sys; sys.path.append(hesaffDir)
+''' Replaces above '''
 try:
-    from hesaff import pyhesaff
-'''
+    import pyhesaff
+
     def detect_kpts_new(rchip_fpath, dict_args):
-        kpts, desc = pyhesaff.detect_kpts(rchip_fpath, **dict_args)
-        ''' Replaces above
+        ''' Replaced 4/21 '''
+        #kpts, desc = pyhesaff.detect_kpts(rchip_fpath, **dict_args)
+        
+        ''' Replaces above '''
         kpts, desc = pyhesaff.detect_feats(rchip_fpath, **dict_args)
-        '''
+        
         return kpts, desc
     print('[extern_feat] new hessaff is available')
 except ImportError as ex:
-    print('[extern_feat] new hessaff is not available: %r' % ex)
-    ''' Replaces above
+    ''' Replaced 4/21 '''
+    #print('[extern_feat] new hessaff is not available: %r' % ex)
+    ''' Replaces above '''
     print('[extern_feat] could not import hesaff.pyhesaff: %r' % ex)
-    '''
+    
     if '--strict' in sys.argv:
         raise
 
