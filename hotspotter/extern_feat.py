@@ -38,7 +38,7 @@ DESC_DTYPE = np.uint8
 
 # Get directory to hesaff repo
 # ASSUME it lives in ~/code/hesaff
-hesaffDir = join(expanduser('~'), 'code/hesaff') # TODO: Make this flexible
+hesaffDir = join(expanduser('~'), 'code','hesaff') # TODO: Make this flexible for windows and different directory structures
 # add it to path for finding modules later
 sys.path.append(hesaffDir)
 
