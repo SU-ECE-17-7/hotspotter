@@ -26,6 +26,7 @@ import load_data2 as ld2
 import match_chips3 as mc3
 import matching_functions as mf
 from autochip import autochip as ac
+import pdb
 
 '''
 TODO:
@@ -533,6 +534,7 @@ class HotSpotter(DynStruct):
             if hs.args.strict:
                 raise
             return msg
+        print(res)
         return res
 
     @profile

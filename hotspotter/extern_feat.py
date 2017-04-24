@@ -8,6 +8,7 @@ import sys
 from os.path import dirname, realpath, join, expanduser
 # Scientific
 import numpy as np
+import pdb
 
 OLD_HESAFF = False or '--oldhesaff' in sys.argv
 if '--newhesaff' in sys.argv:
@@ -63,6 +64,9 @@ try:        # NOTE: pyhesaff lives in ~/code/hesaff as of 4/21/17
     import pyhesaff # Replaces line above
             
     def detect_kpts_new(rchip_fpath, dict_args):
+        print('using new')
+        pdb.set_trace()
+        kpts, desc = pyhesaff.detect_kpts(rchip_fpath, **dict_args)
         #kpts, desc = pyhesaff.detect_kpts(rchip_fpath, **dict_args)
         kpts, desc = pyhesaff.detect_feats(rchip_fpath, **dict_args)    # Replaces line above
 
@@ -80,6 +84,7 @@ try:
     from hstpl.extern_feat import pyhesaffexe
 
     def detect_kpts_old(rchip_fpath, dict_args):
+        print ('using old')
         kpts, desc = pyhesaffexe.detect_kpts(rchip_fpath, **dict_args)
         return kpts, desc
     print('[extern_feat] old hessaff is available')
@@ -100,3 +105,4 @@ else:
 #----
 def compute_hesaff(rchip_fpath, dict_args):
     return detect_kpts(rchip_fpath, dict_args)
+
