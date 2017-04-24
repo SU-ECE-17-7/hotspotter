@@ -26,7 +26,6 @@ import load_data2 as ld2
 import match_chips3 as mc3
 import matching_functions as mf
 from autochip import autochip as ac
-import autoquery as aq
 
 '''
 TODO:
@@ -465,7 +464,39 @@ class HotSpotter(DynStruct):
     def autoquery(hs): 
         #import MCL as mcl
         # Initialize at zero
-        scoreMat = aq.autoquery()
+        numChips = hs.get_num_chips()
+        scoreMat = np.zeros((numChips, numChips))
+        print("[hs] beginning autoquery")
+        
+        ''' Make score matrix with query results '''
+        for chipNum in hs.get_valid_cxs():  # For each chip
+            results = hs.query(chipNum)     # Query this chip
+            results = results.cx2_score     # Toss everything except the score
+            
+            # Normalize scores
+            maxScore = max(results)
+            if not maxScore:
+                results = [0]*len(results)
+            else:
+                results = [score/maxScore for score in results]
+            
+            '''====================='''
+            #import pdb; pdb.set_trace()
+            '''====================='''
+            
+            # Only grab nonzero values
+            matches = np.nonzero(results)[0]
+            
+            for i in matches:                # For each matched chip,
+                if scoreMat[chipNum-1][i] == 0.0:   # If these chips haven't been matched yet,
+                    # Insert this score
+                    scoreMat[chipNum-1][i] = results[i]
+                    scoreMat[i][chipNum-1] = results[i]
+                else: # If chips have been matched by previous query,
+                    # Average old and new score
+                    scoreMat[chipNum-1][i] = (results[i] + scoreMat[chipNum-1][i])/2
+                    scoreMat[i][chipNum-1] = (results[i] + scoreMat[i][chipNum-1])/2
+        
         ''' Write scores to csv file '''
         print("[hs] saving aq scores")
         ld2.write_score_matrix(hs, scoreMat)

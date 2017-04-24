@@ -670,6 +670,12 @@ def write_score_matrix(hs, scoreMat): # TODO: don't pass the matrix, offload str
     #CREATE_BACKUP = True  # TODO: Should be a preference
     #if CREATE_BACKUP:
     #    backup_csv_tables(hs, force_backup=True)
+    
+    # delete old scores if they exist
+    if os.path.isfile(join(internal_dir, SCORE_MATRIX_FNAME)):
+        print('[ld2] deleting old scores')
+        os.remove(join(internal_dir, SCORE_MATRIX_FNAME))
+        
     fpath = join(internal_dir, SCORE_MATRIX_FNAME)
     # write csv files
     size = len(scoreMat)

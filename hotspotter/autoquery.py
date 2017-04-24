@@ -1,8 +1,9 @@
 # autoquery.py
 import numpy as np
+''' DEPRECATED?'''
 
 ''' Autoquerying '''
-def autoquery(hs):
+def autoquery():
     numChips = hs.get_num_chips()
     scoreMat = np.zeros((numChips, numChips))
     print("[hs] beginning autoquery")

@@ -737,6 +737,7 @@ class MainWindowBackend(QtCore.QObject):
     @blocking
     @profile
     def autochip(back):
+        # TODO: Document This
         # ASSUME images are in PWD/DB/images
         fpath = back.get_work_directory() + '/' + back.hs.get_db_name() +'/images/templates' # JB
         #fpath = back.get_work_directory() + '/test_autochip/templates'

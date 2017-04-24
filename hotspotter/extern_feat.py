@@ -70,6 +70,7 @@ try:        # NOTE: pyhesaff lives in ~/code/hesaff as of 4/21/17
     print('[extern_feat] got newest hesaff from hesaff repo')
 except ImportError as ex:
     #print('[extern_feat] new hessaff is not available: %r' % ex)
+    print('[extern_feat] looking for hesaff in %s...' % hesaffDir)
     print('[extern_feat] could not import hesaff: %r' % ex)
     if '--strict' in sys.argv:
         raise
