@@ -6,7 +6,7 @@
 
 import numpy as np 
 import csv
-maxMatches = 6 #decide how many to do 
+#maxMatches = 6 #decide how many to do 
 
 def createMatix(hs): #maybe get rid of *args and **kwargs everywhere
         size = hs.get_num_chips()
@@ -18,13 +18,9 @@ def createMatix(hs): #maybe get rid of *args and **kwargs everywhere
                 res_dict = hs.query(ID)
                 results = res_dict.cx2_score #i think cx2_score
                 div = max(results)
-                modResults = [num/div for num in results]
-
-                """
-                insert code that will create a list that has indexes
-                of top matches defined by maxMatches
-
-                """
+                if div > 0.0:
+                        modResults = [num/div for num in results]
+        
                 temp = np.nonzero(modResults)
                 matches = temp[0]
 
