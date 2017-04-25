@@ -8,7 +8,7 @@ import numpy as np
 import csv
 #maxMatches = 6 #decide how many to do 
 
-def createMatix(hs): #maybe get rid of *args and **kwargs everywhere
+def createMatrix(hs): #maybe get rid of *args and **kwargs everywhere
         size = hs.get_num_chips()
         Matrix = np.zeros((size,size))
 

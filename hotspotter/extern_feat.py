@@ -5,9 +5,10 @@ from hscom import __common__
 # Standard
 import os
 import sys
-from os.path import dirname, realpath, join
+from os.path import dirname, realpath, join, expanduser
 # Scientific
 import numpy as np
+import pdb
 
 OLD_HESAFF = False or '--oldhesaff' in sys.argv
 if '--newhesaff' in sys.argv:
@@ -36,6 +37,13 @@ KPTS_DTYPE = np.float64
 DESC_DTYPE = np.uint8
 
 
+# Get directory to hesaff repo
+# ASSUME it lives in ~/code/hesaff
+#hesaffDir = join(expanduser('~'), 'code','hesaff') # TODO: Make this flexible for windows and different directory structures
+hesaffDir = join(realpath('..'),'hesaff')
+# add it to path for finding modules later
+sys.path.append(hesaffDir)
+
 #---------------------------------------
 # Define precompute functions
 def precompute(rchip_fpath, feat_fpath, dict_args, compute_fn):
@@ -51,15 +59,24 @@ def precompute_hesaff(rchip_fpath, feat_fpath, dict_args):
 #---------------------------------------
 # Work functions which call the external feature detectors
 # Helper function to call commands
-try:
-    from hstpl.extern_feat import pyhesaff
-
+try:        # NOTE: pyhesaff lives in ~/code/hesaff as of 4/21/17
+    #from hstpl.extern_feat import pyhesaff
+    import pyhesaff # Replaces line above
+            
     def detect_kpts_new(rchip_fpath, dict_args):
+        print('using new')
+        #pdb.set_trace()
         kpts, desc = pyhesaff.detect_kpts(rchip_fpath, **dict_args)
+        #kpts, desc = pyhesaff.detect_kpts(rchip_fpath, **dict_args)
+        kpts, desc = pyhesaff.detect_feats(rchip_fpath, **dict_args)    # Replaces line above
+
         return kpts, desc
-    print('[extern_feat] new hessaff is available')
+    #print('[extern_feat] new hessaff is available')
+    print('[extern_feat] got newest hesaff from hesaff repo')
 except ImportError as ex:
-    print('[extern_feat] new hessaff is not available: %r' % ex)
+    #print('[extern_feat] new hessaff is not available: %r' % ex)
+    print('[extern_feat] looking for hesaff in %s...' % hesaffDir)
+    print('[extern_feat] could not import hesaff: %r' % ex)
     if '--strict' in sys.argv:
         raise
 
@@ -67,6 +84,7 @@ try:
     from hstpl.extern_feat import pyhesaffexe
 
     def detect_kpts_old(rchip_fpath, dict_args):
+        print ('using old')
         kpts, desc = pyhesaffexe.detect_kpts(rchip_fpath, **dict_args)
         return kpts, desc
     print('[extern_feat] old hessaff is available')
@@ -87,3 +105,4 @@ else:
 #----
 def compute_hesaff(rchip_fpath, dict_args):
     return detect_kpts(rchip_fpath, dict_args)
+

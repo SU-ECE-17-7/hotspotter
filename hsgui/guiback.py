@@ -20,6 +20,7 @@ from hsviz import draw_func2 as df2
 from hsviz import viz
 from hsviz import interact
 from hotspotter import HotSpotterAPI
+import os
 
 FNUMS = dict(image=1, chip=2, res=3, inspect=4, special=5, name=6)
 viz.register_FNUMS(FNUMS)
@@ -738,7 +739,33 @@ class MainWindowBackend(QtCore.QObject):
     def MCL(back):
         back.hs.call_MCL()
         print('')
-        
+
+
+    '''Added 4/23/2017 by Joshua Beard
+    pretty rough'''
+    @slot_()
+    @blocking
+    @profile
+    def autoquery(back):
+        back.hs.autoquery()       
+
+    '''Added 3/7/2017 by Matt Dioso
+    pretty rough'''
+    @slot_()
+    @blocking
+    @profile
+    def autochip(back):
+        # TODO: Document This
+        # ASSUME images are in PWD/DB/images
+        fpath = back.get_work_directory() + '/' + back.hs.get_db_name() +'/images/templates' # JB
+        #fpath = back.get_work_directory() + '/test_autochip/templates'
+        #fpath = back.get_work_directory() + '/Demo_Data/templates'
+        #fpath = os.getcwd() + '/matFiles'
+        back.hs.autochip(fpath)
+        back.populate_tables()
+        print('')
+
+
     @slot_()
     @blocking
     @profile
@@ -767,6 +794,9 @@ class MainWindowBackend(QtCore.QObject):
         back.show_query_result(res, tx)
         return res
 
+
+
+        
     @slot_()
     @blocking
     @profile
@@ -869,10 +899,12 @@ class MainWindowBackend(QtCore.QObject):
         # pyqt-how-to-capture-output-of-pythons-interpreter-
         # and-display-it-in-qedittext
         #prevBlock = back.front.blockSignals(True)
-        import matching_functions as mf
-        import DataStructures as ds
-        import match_chips3 as mc3
+        from hotspotter import matching_functions as mf
+        from hotspotter import DataStructures as ds
+        from hotspotter import match_chips3 as mc3
         import sys
+	import pdb
+	pdb.set_trace()
         back.precompute_feats()
         valid_cx = back.hs.get_valid_cxs()
         if back.hs.args.quiet:
