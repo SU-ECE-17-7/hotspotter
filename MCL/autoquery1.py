@@ -21,7 +21,9 @@ def createMatrix(hs): #maybe get rid of *args and **kwargs everywhere
                 res_dict = hs.query(chip1)
                 results = res_dict.cx2_score 
                 div = max(results)
-                if div > 0.0:
+                if not div:
+                        results = [0]*len(results)
+                else:
                         results = [num/div for num in results]
  		for j in hs.get_valid_cxs():
 			chip2 = hs.cx2_cid(j)
