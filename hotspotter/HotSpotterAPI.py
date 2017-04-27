@@ -466,6 +466,7 @@ class HotSpotter(DynStruct):
     
     @profile
     def autoquery(hs): 
+        #hs.prequery() # Do we need to do this?
         #import MCL as mcl
         # Initialize at zero
         numChips = hs.get_num_chips()
@@ -474,6 +475,9 @@ class HotSpotter(DynStruct):
         
         ''' Make score matrix with query results '''
         for chipNum in hs.get_valid_cxs():  # For each chip
+            '''====================='''
+            import pdb; pdb.set_trace()
+            '''====================='''
             results = hs.query(chipNum)     # Query this chip
             results = results.cx2_score     # Toss everything except the score
             
@@ -530,6 +534,7 @@ class HotSpotter(DynStruct):
         qdat.set_cfg(query_cfg)
         dcxs = hs.get_indexed_sample()
         try:
+            import pdb; pdb.set_trace()
             res = mc3.query_dcxs(hs, qcx, dcxs, hs.qdat, dochecks=dochecks)
         except mf.QueryException as ex:
             msg = '[hs] Query Failure: %r' % ex

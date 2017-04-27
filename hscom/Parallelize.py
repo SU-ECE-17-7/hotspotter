@@ -49,8 +49,8 @@ def parallel_compute(func, arg_list, num_procs=1, lazy=True, args=None, common_a
     # Do not execute small tasks in parallel
     if nTasks < num_procs / 2 or nTasks == 1:
         num_procs = 1
-    #num_procs = min(num_procs, nTasks)
-    num_procs=1
+    num_procs = min(num_procs, nTasks)
+    #num_procs=1
     task_lbl = func.func_name + ': '
     try:
         ret = parallelize_tasks(task_list, num_procs, task_lbl)
@@ -100,9 +100,7 @@ def parallelize_tasks(task_list, num_procs, task_lbl, verbose=True):
         if num_procs >= 1:
             print('[parallel] Forced serial processing')
             # Parallelize tasks
-            return _compute_in_serial(task_list, task_lbl, verbose) #trying to force serial computation -MD
-            #return _compute_in_parallel(task_list, num_procs, task_lbl, verbose)
-            #return _compute_in_parallel(task_list, num_procs, task_lbl, verbose)
+            return _compute_in_serial(task_list, task_lbl, verbose)
             ''' Hacky patch to hopefully avoid segfaults '''
             return _compute_in_serial(task_list, task_lbl, verbose)
         else:

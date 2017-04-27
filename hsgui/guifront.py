@@ -155,10 +155,9 @@ def connect_button_signals(front):
     ui.pushButton_2.clicked.connect(back.save_database)
     ui.AutoChip.clicked.connect(back.autochip)
     ui.pushButton_3.clicked.connect(back.save_database)
-
-    ui.AutoQuery.clicked.connect(back.MCL)
-
-    #ui.AutoQuery.clicked.connect(back.autoquery) # uncommented 4/23/17 jb
+    # AutoQuery connection. 
+    #ui.AutoQuery.clicked.connect(back.MCL)
+    ui.AutoQuery.clicked.connect(back.autoquery) # uncommented 4/23/17 jb
 
 
 def connect_action_signals(front):
