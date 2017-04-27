@@ -565,18 +565,18 @@ class HotSpotter(DynStruct):
         if os.path.isfile("Matrix.csv"):
             os.remove("Matrix.csv")
         
-        Matrix = aq.createMatrix(hs)
-        aq.createFile(hs,Matrix) 
-	"""
+        Matrix = mcl.createMatrix(hs)
+        mcl.createFile(hs,Matrix) 
+	
         print ("Matrix created............")
         M, G = mclCluster.get_graph("Matrix.csv")
-        M, clusters = mclCluster.networkx_mcl(G, expand_factor = 2,
-                                  inflate_factor = 2,
+        M, clusters = mclCluster.networkx_mcl(G, expand_factor = 3,
+                                  inflate_factor = 3,
                                   max_loop = 60,
                                   mult_factor = 2)
         mclCluster.clusters_to_output(clusters, hs)
 
-	"""
+    
 
 
 
