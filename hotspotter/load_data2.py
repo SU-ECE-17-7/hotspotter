@@ -668,31 +668,44 @@ def write_clusters(hs, clusterTable, numClusters):
     print('[ld2] writing cluster table')
     internal_dir = hs.dirs.internal_dir
     fpath = join(internal_dir, CLUSTER_TABLE_NAME)
+
+    # Delete old file if it exists
     if os.path.isfile(fpath):
         print('[ld2] deleting old cluster table')
         os.remove(fpath)
-    #import pdb; pdb.set_trace()
 
-    '''
-    # write csv files
-    fid = open(fpath, "w")
-    for cat, image in clusterTable:
-        fid.write(cat+","+image+"\n")
-    print('[ld2] wrote clusters to cluster table')
-    
-    (nImgs, nFields) = clusterTable.shape()
-    fid = open(fpath, "w")
-    for image in range(nImgs):
-        for field in range(nFields-1):
-            fid.write(clusterTable[image][field]+",")
-        fid.write(clusterTable[image][nFields]+"\n")
-    '''
     written = defaultdict(list)
-    fid = open(fpath, "w")
+    fid = open(fpath, "w")  # Open file for writing
+    
+    # Write headers at top
+    if clusterTable[0][3].startswith('Station'):    # If using study IDs
+        fid.write("Cat ID,Image Name,Study ID, Station, Camera, Date, Time\n")
+    else:                                            # No study IDs
+        fid.write("Cat ID,Image Name, Station, Camera, Date, Time\n")
+
+    import pdb; pdb.set_trace()
+
+    for thisChip in clusterTable:                 # Go through each chip's info
+        cat = thisChip[0]                          # Get cat and image names
+        image = thisChip[1]                        #
+        if image not in written.keys():            # If image hasn't been seen yet    
+            written[image] = [0]*numClusters        # Initialize
+            fid.write("Cat_"+cat+","+image+",")     # Write cat ID and image
+            for i in range (2, len(thisChip)-1):    # For all other fields to write
+                fid.write(thisChip[i]+",")           # Separate fields with commas...
+            fid.write(thisChip[i+1]+"\n")           # ...except last one
+            written[image][int(cat)-1] = 1          # Record image-cat pair as seen
+        else:                                      # Image has been seen
+            if not written[image][int(cat)-1]:      # If image-cat pair hasn't been seen
+                fid.write("Cat_"+cat+","+image+",")     # Write cat ID and image
+                for i in range (2, len(thisChip)-1):    # For all other fields to write
+                    fid.write(thisChip[i]+",")           # Separate fields with commas...
+                fid.write(thisChip[i+1]+"\n")           # ...except last one
+                written[image][int(cat)-1] = 1          # Record image-cat pair as seen
+       
+    '''
     for cat, image in clusterTable:
-        #Testy stuff
         # Keep track of unique image-cat pairs for writing
-        #written = {'':[]}                       # Dictionary corresponding to image-cluster pairs
         if image not in written.keys():                  # Image has not been encountered yet
             written[image] = [0]*numClusters    # Initialize
             fid.write("Cat_"+cat+","+image+"\n") # write to csv
@@ -702,20 +715,21 @@ def write_clusters(hs, clusterTable, numClusters):
             if not written[image][int(cat)-1]:    # This image-cat pair has not been written
                 fid.write("Cat_"+cat+","+image+"\n")
                 written[image][int(cat)-1] = 1    # Record this image-cat pair
+    ''' 
     fid.close()
     print('[ld2] successfully closed cluster table file')
 
-def write_score_matrix(hs, scoreMat): # TODO: don't pass the matrix, offload string conversion
+def write_score_matrix(hs, scoreMat, fileName=SCORE_MATRIX_FNAME): # TODO: don't pass the matrix, offload string conversion
     
     print('[ld2] Writing score matrix')
     internal_dir = hs.dirs.internal_dir
     #CREATE_BACKUP = True  # TODO: Should be a preference
     #if CREATE_BACKUP:
     #    backup_csv_tables(hs, force_backup=True)
-    fpath = join(internal_dir, SCORE_MATRIX_FNAME)
+    fpath = join(internal_dir, fileName)
     if os.path.isfile(fpath):
         print('[ld2] deleting old scores')
-        os.remove(join(internal_dir, SCORE_MATRIX_FNAME))
+        os.remove(join(internal_dir, fileName))
     # write csv files
     size = len(scoreMat)
     fid = open(fpath, "w")
