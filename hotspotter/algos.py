@@ -12,7 +12,9 @@ import textwrap
 # Matplotlib
 #import matplotlib.pyplot as plt
 # Scientific
-import pyflann
+#import pyflann
+from hstpl.extern_feat import pyflann
+from hstpl.extern_feat.pyflann import index
 #import sklearn.decomposition
 #import sklearn.preprocessing
 #import sklearn
@@ -557,7 +559,8 @@ def precompute_flann(data, cache_dir=None, uid='', flann_params=None,
     flann_fname = 'flann_index_' + uid + flann_suffix
     flann_fpath = os.path.normpath(join(cache_dir, flann_fname))
     # Load the index if it exists
-    flann = pyflann.FLANN()
+    flann = index.FLANN()
+	#flann = pyflann.FLANN()
     load_success = False
     if helpers.checkpath(flann_fpath) and not force_recompute:
         try:
