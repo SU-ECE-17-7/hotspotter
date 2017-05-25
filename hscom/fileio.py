@@ -12,7 +12,7 @@ import datetime
 import time
 # Science
 import numpy as np
-import cv2
+from hstpl.extern_feat import cv2
 from PIL import Image
 from PIL.ExifTags import TAGS
 # Hotspotter

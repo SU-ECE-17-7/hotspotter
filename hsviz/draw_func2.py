@@ -34,7 +34,7 @@ from PyQt4.QtCore import Qt
 # Scientific
 import numpy as np
 import scipy.stats
-import cv2
+from hstpl.extern_feat import cv2
 # HotSpotter
 from hscom import helpers
 from hscom import tools

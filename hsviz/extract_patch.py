@@ -4,7 +4,7 @@ from hscom import __common__
 (print, print_, print_on, print_off,
  rrr, profile) = __common__.init(__name__, '[extract]')
 # Science
-import cv2
+from hstpl.extern_feat import cv2
 import numpy as np
 from numpy import sqrt
 # Hotspotter
