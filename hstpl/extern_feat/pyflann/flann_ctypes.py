@@ -206,7 +206,10 @@ def load_flann_library():
 		    print('[flann] Trying %s' % (libpath,))
 		os.environ['PATH'] = os.path.dirname(__file__) + ';' + os.environ['PATH']
 		print(os.environ['PATH'])
-		flannlib = cdll['libflann.dll']
+                if os.name == 'nt':
+		    flannlib = cdll['libflann.dll']
+                else:
+                    flannlib = cdll['libflann.so']
 		'''
         for libpath in libnames:
             try:
