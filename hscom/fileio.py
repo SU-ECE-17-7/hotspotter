@@ -12,7 +12,11 @@ import datetime
 import time
 # Science
 import numpy as np
-from hstpl.extern_feat import cv2
+if os.name == 'nt':
+    from hstpl.extern_feat import cv2
+else:
+    import cv2
+    
 from PIL import Image
 from PIL.ExifTags import TAGS
 # Hotspotter

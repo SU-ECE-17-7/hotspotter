@@ -90,10 +90,13 @@ def load_clib(libname, root_dir):
     print (os.environ['PATH'])
     print('successfully added hesaff to path')
     lib_fpath = find_lib_fpath(libname, root_dir)
-    name = "libhesaff.dll"
+    #name = "libhesaff.dll"
     #lib_fpath = os.path.dirname(os.path.abspath(__file__)) + os.path.sep + name
     try:
-        clib = C.cdll['libhesaff.dll']
+        if os.name == 'nt':
+            clib = C.cdll['libhesaff.dll']
+        else:
+            clib = C.cdll[lib_fpath]
         #print('loading libhesaff.dll')
         #clib = C.windll['C:\Users\Matt\Desktop\code\hotspotter\hstpl\extern_feat\libhesaff.dll']
 

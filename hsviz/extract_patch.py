@@ -3,8 +3,12 @@ from __future__ import division, print_function
 from hscom import __common__
 (print, print_, print_on, print_off,
  rrr, profile) = __common__.init(__name__, '[extract]')
+import os
 # Science
-from hstpl.extern_feat import cv2
+if os.name == 'nt':
+    from hstpl.extern_feat import cv2
+else:
+    import cv2
 import numpy as np
 from numpy import sqrt
 # Hotspotter

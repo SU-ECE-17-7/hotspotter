@@ -17,6 +17,8 @@ from hscom import fileio as io
 from hscom import helpers
 from hsviz import draw_func2 as df2
 
+import pdb
+
 IS_INIT = False
 DISABLE_NODRAW = False
 DEBUG = False
@@ -414,6 +416,7 @@ def run_main_loop(app, is_root=True, back=None, **kwargs):
         #exec_core_event_loop(app)
     else:
         print('[*guitools] using roots main loop')
+	pdb.set_trace()
 
 
 @profile

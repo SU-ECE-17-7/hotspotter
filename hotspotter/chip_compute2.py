@@ -9,7 +9,11 @@ import warnings
 from os.path import join
 # Science
 import numpy as np
-from hstpl.extern_feat import cv2
+import os
+if os.name == 'nt':
+    from hstpl.extern_feat import cv2
+else:
+    import cv2    
 from PIL import Image
 # Hotspotter
 from hscom import helpers

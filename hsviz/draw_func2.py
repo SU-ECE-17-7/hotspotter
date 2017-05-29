@@ -10,6 +10,7 @@ from hscom import __common__
 (print, print_, print_on, print_off, rrr, profile,
  printDBG) = __common__.init(__name__, '[df2]', DEBUG=False, initmpl=True)
 # Python
+import os
 from itertools import izip
 from os.path import splitext, split, join, normpath, exists
 import colorsys
@@ -34,7 +35,10 @@ from PyQt4.QtCore import Qt
 # Scientific
 import numpy as np
 import scipy.stats
-from hstpl.extern_feat import cv2
+if os.name == 'nt':
+    from hstpl.extern_feat import cv2
+else:
+    import cv2
 # HotSpotter
 from hscom import helpers
 from hscom import tools
