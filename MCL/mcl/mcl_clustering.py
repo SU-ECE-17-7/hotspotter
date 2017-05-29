@@ -82,6 +82,7 @@ def mcl(M, expand_factor = 2, inflate_factor = 2, max_loop = 10 , mult_factor = 
 
 def networkx_mcl(G, expand_factor = 2, inflate_factor = 2, max_loop = 10 , mult_factor = 1):
     import networkx as nx
+    #import pdb; pdb.set_trace()
     A = nx.adjacency_matrix(G)
     return mcl(np.array(A.todense()), expand_factor, inflate_factor, max_loop, mult_factor)
 
@@ -164,31 +165,43 @@ def clusters_to_output(hs, clusters):
     """
     imageList = [[]]
     temp = 0
+    
     for k,v in clusters.items():
         for chipID in v:
-            imageList[temp].append(str(k+1))
+            imageList[temp].append(str(k+1))                # Cat name
             #imageList[temp].append("cat"+str(k+1))
-            imageList[temp].append(hs.cx2_gname(chipID))
+            imageList[temp].append(hs.cx2_gname(chipID))    # Image Name
+            #image = hs.cx2_gname(chipID)
+            imageSplit = hs.cx2_gname(chipID).split("__")   # Parse image info
+            imageSplit[len(imageSplit)-1] = imageSplit[len(imageSplit)-1].split('.')[0] # Cut image type
+            #import pdb; pdb.set_trace()
+            #imageSplit = image.split("__")
+            for i in range(len(imageSplit)-1):          # For all parsed fields (except time)
+                imageList[temp].append(imageSplit[i])   # Record info
+            imageTime = imageSplit[len(imageSplit)-1].split("(")        # Parse out set numeral (from PantheraR)
+            imageList[temp].append(imageTime[0])        # Add time
             temp =  temp +1
             imageList.append([])    # Add null entry for future entries
     imageList.remove([])            # Remove null entries                               
-    #here and return imageList at the bottom
+    
+    
+    # Count and print number of clusters (cats)
     clusterCount = len(clusters) #how many clusters or cats we have
     print ("clusterCount: " +str(clusterCount))
                                    
     #Here we are walking through the dict and creating a new one
     #Where we force the chip to belong to one cluster(the cluster with the lower number
+    
     cid_dict = {}
     for k,v in clusters.items():
         for chipID in v:
             if (chipID+1) not in cid_dict.keys():
                 cid_dict[chipID+1] = "cat_"+str(k+1)
             else:
-                cid_dict[chipID+1] = cid_dict[chipID+1] +", cat_"+str(k+1)
-    
+                cid_dict[chipID+1] = cid_dict[chipID+1] +"/cat_"+str(k+1)
     for k,v in cid_dict.items():
         print('{}, {}'.format(k,v))
-
+    print("Thats the list")
     """
     
     chip_gname = hs.cx2_gname(0)
@@ -252,7 +265,9 @@ def clusters_to_output(hs, clusters):
     for chipobj in hs.get_valid_cxs():
         chipID = hs.cx2_cid(chipobj)
         chipname = cid_dict[chipID]
+        #print chipname
         #chipname = "Cat_"+str(cid_dict[chipID])
+        #chipname = "cat1_cat2"
         hs.change_name(chipobj, chipname)
     
     return imageList, clusterCount
